@@ -2,6 +2,7 @@ package redescomputacionales.cl.appredeswifi;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
@@ -84,6 +85,8 @@ public class MainActivity extends AppCompatActivity
         //Para obtener la última (o actual) ubicacion conocida
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
 
+        getSupportActionBar().setTitle("Registrar estado de red");
+
 
 
         //Permisos
@@ -148,19 +151,19 @@ public class MainActivity extends AppCompatActivity
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
-
-        if (id == R.id.nav_camera) {
-            // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
-
-        } else if (id == R.id.nav_slideshow) {
-
-        } else if (id == R.id.nav_manage) {
-
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
-
+        item.setCheckable(false);
+        if (id == R.id.registros) {
+            Intent registros = new Intent(MainActivity.this, RegistrosActivity.class);
+            if (registros != null)
+            {
+                startActivity(registros);
+            }
+            else
+            {
+                Toast.makeText(this, "Ha ocurrido un error", Toast.LENGTH_SHORT).show();
+            }
+        } else if (id == R.id.nada) {
+            Toast.makeText(this, "Esto es opcional", Toast.LENGTH_SHORT).show();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
