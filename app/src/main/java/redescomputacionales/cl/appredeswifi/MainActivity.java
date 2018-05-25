@@ -2,8 +2,11 @@ package redescomputacionales.cl.appredeswifi;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.content.ContentValues;
+import android.content.Intent;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.sqlite.SQLiteDatabase;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -20,6 +23,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -39,6 +44,10 @@ public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, OnMapReadyCallback, GoogleMap.OnMyLocationButtonClickListener,
         GoogleMap.OnMyLocationClickListener, GoogleMap.OnMarkerDragListener {
 
+
+
+
+
     //Codigo para pedir permiso
     static final Integer GPS_SETTINGS = 0x7;
 
@@ -56,6 +65,8 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -63,9 +74,31 @@ public class MainActivity extends AppCompatActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Esto debería guardar el registro", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+
+
+                Snackbar.make(view, "latitud" + gpsLocation.latitude +"longitud: "+ gpsLocation.longitude, Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity.this,"Se guardó el registro", Toast.LENGTH_SHORT).show();
+
+
+                ConexionSQLiteHelper bdConn = new ConexionSQLiteHelper(MainActivity.this);
+                SQLiteDatabase db = bdConn.getWritableDatabase();
+                if (db != null) {
+                    ContentValues registronuevo = new ContentValues();
+                    registronuevo.put("latitud", gpsLocation.latitude);
+                    registronuevo.put("longitud",gpsLocation.longitude);
+
+                    db.insert("registros", null, registronuevo);
+                    Toast.makeText(MainActivity.this, "Datos Almacenados", Toast.LENGTH_SHORT).show();
+                }
+
+                startActivity(new Intent(MainActivity.this, datos.class));
+
+
+
             }
+
+
+
         });
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -108,9 +141,8 @@ public class MainActivity extends AppCompatActivity
             }
         }
 
-
-
     }
+
 
     @Override
     public void onBackPressed() {
@@ -217,6 +249,7 @@ public class MainActivity extends AppCompatActivity
         //Asigna la LatLng a partir la ubicación GPS
         gpsLocation = new LatLng(location.getLatitude(), location.getLongitude());
         Toast.makeText(this, "Posición actual: " + gpsLocation.toString(), Toast.LENGTH_SHORT).show();
+
     }
 
     public void addMarkerToLocation(Location location, String tittle)
@@ -257,4 +290,5 @@ public class MainActivity extends AppCompatActivity
                     }
                 });
     }
+
 }
