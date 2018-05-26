@@ -90,11 +90,6 @@ public class MainActivity extends AppCompatActivity
                     db.insert("registros", null, registronuevo);
                     Toast.makeText(MainActivity.this, "Datos Almacenados", Toast.LENGTH_SHORT).show();
                 }
-
-                startActivity(new Intent(MainActivity.this, datos.class));
-
-
-
             }
 
 
