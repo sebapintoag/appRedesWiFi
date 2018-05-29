@@ -19,7 +19,7 @@ public class ConexionSQLiteHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {   // se crea los script
 
-        db.execSQL("CREATE TABLE registros(id_registro INTEGER, latitud INTEGER, longitud INTEGER)");
+        db.execSQL("CREATE TABLE registros(id_registro INTEGER PRIMARY KEY AUTOINCREMENT, latitud INTEGER, longitud INTEGER, fechaHora TEXT)");
     }
 
     @Override
@@ -30,52 +30,5 @@ public class ConexionSQLiteHelper extends SQLiteOpenHelper {
 
     }
 
-    /*/ variables globales, sirven para manipular la bd
-
-    ConexionSQLiteHelper ayuda;
-    SQLiteDatabase db;
-
-
-    // metodos para manejar la bd
-
-    public void abrir(){
-
-        ayuda = new ConexionSQLiteHelper(ctx);
-        db = ayuda.getWritableDatabase();
-    }
-
-    public void cerrar(){
-
-        db.close();
-    }
-
-    //Metodos para manipular datos
-
-    public long registrar(String latitud) throws Exception{
-
-        ContentValues valores = new ContentValues();
-        valores.put("latitud", latitud);
-       // valores.put("longitud", longitud);
-
-        return  db.insert("registros",null, valores);
-
-    }
-
-    public String consultar( ) throws Exception{
-
-        String datos="";
-        String[] columnas=new String[]{"latitud"};
-
-        Cursor c= db.query("registros",columnas,null,null,null,null,null);
-
-
-        for(c.moveToFirst();!c.isAfterLast();c.moveToNext()){
-
-            datos+=c.getString(c.getColumnIndex("latitud"))+"\n";
-
-        }
-
-        return datos;
-    }*/
 }
 

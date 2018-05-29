@@ -40,6 +40,9 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, OnMapReadyCallback, GoogleMap.OnMyLocationButtonClickListener,
         GoogleMap.OnMyLocationClickListener, GoogleMap.OnMarkerDragListener {
@@ -75,8 +78,10 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onClick(View view) {
 
+                SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy / HH:mm");
+                String fechaHora = sdf.format(new Date());
 
-                Snackbar.make(view, "latitud" + gpsLocation.latitude +"longitud: "+ gpsLocation.longitude, Toast.LENGTH_SHORT).show();
+                Snackbar.make(view, "latitud" + gpsLocation.latitude +"longitud: "+ gpsLocation.longitude + "Fecha: "+ fechaHora, Toast.LENGTH_SHORT).show();
                 Toast.makeText(MainActivity.this,"Se guardó el registro", Toast.LENGTH_SHORT).show();
 
 
@@ -86,6 +91,7 @@ public class MainActivity extends AppCompatActivity
                     ContentValues registronuevo = new ContentValues();
                     registronuevo.put("latitud", gpsLocation.latitude);
                     registronuevo.put("longitud",gpsLocation.longitude);
+                    registronuevo.put("fechaHora",fechaHora);
 
                     db.insert("registros", null, registronuevo);
                     Toast.makeText(MainActivity.this, "Datos Almacenados", Toast.LENGTH_SHORT).show();
