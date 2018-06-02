@@ -50,8 +50,7 @@ public class RegistrosActivity extends AppCompatActivity {
             String[] arreglo = new String[cantidad];
             if (c.moveToFirst()) {
                 do {
-                    String linea = c.getInt(0) + " " + c.getString(1) + " " + c.getString(2);
-                    ;
+                    String linea = c.getInt(0) + "/ " + c.getFloat(1) + "/ " + c.getFloat(2) + "/ " + c.getString(3);
                     arreglo[i] = linea;
                     i++;
                 } while (c.moveToNext());
