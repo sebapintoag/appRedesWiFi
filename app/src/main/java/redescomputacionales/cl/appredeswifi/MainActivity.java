@@ -57,6 +57,7 @@ public class MainActivity extends AppCompatActivity
     //Clase WifiInfo con los metodos para obtener datos de la coneccion
     private WifiManager wifiManager;
     private WifiInfo connectionInfo;
+    //Datos wifi solicitados
     private int speed;
     private int dBms;
     @Override
@@ -110,6 +111,7 @@ public class MainActivity extends AppCompatActivity
                         GPS_SETTINGS);
             }
         }
+        //WIFI
         wifiManager = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
         connectionInfo = wifiManager.getConnectionInfo();
     }
@@ -211,8 +213,11 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onMarkerDragEnd(Marker marker) {
         gpsLocation = marker.getPosition();
-        //dBms = wifinfo.getLinkSpeed();
-        //speed = wifinfo.getLinkSpeed();
+
+        //Actualiza los valores del wifi
+        dBms = connectionInfo.getFrequency();
+        speed = connectionInfo.getLinkSpeed();
+
         Toast.makeText(this, "Posición final: " + gpsLocation.toString() + dBms + " Mhz "+ speed + " Mbps", Toast.LENGTH_SHORT).show();
     }
 
@@ -220,8 +225,11 @@ public class MainActivity extends AppCompatActivity
     {
         //Asigna la LatLng a partir la ubicación GPS
         gpsLocation = new LatLng(location.getLatitude(), location.getLongitude());
+
+        //Actualiza los valores del wifi
         dBms = connectionInfo.getFrequency();
         speed = connectionInfo.getLinkSpeed();
+
         Toast.makeText(this, "Posición actual: " + gpsLocation.toString() + dBms + " Mhz "+ speed + " Mbps", Toast.LENGTH_SHORT).show();
     }
 
