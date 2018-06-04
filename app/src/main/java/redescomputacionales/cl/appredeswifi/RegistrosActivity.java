@@ -38,7 +38,7 @@ public class RegistrosActivity extends AppCompatActivity {
         }
     }
 
-    private void  cargar (){
+    private void cargar (){
 
         ConexionSQLiteHelper bdConn = new ConexionSQLiteHelper(RegistrosActivity.this);
         SQLiteDatabase db = bdConn.getWritableDatabase();
@@ -50,7 +50,7 @@ public class RegistrosActivity extends AppCompatActivity {
             String[] arreglo = new String[cantidad];
             if (c.moveToFirst()) {
                 do {
-                    String linea = c.getInt(0) + "/ " + c.getFloat(1) + "/ " + c.getFloat(2) + "/ " + c.getString(3);
+                    String linea = c.getInt(0) + " | " + c.getFloat(1) + " | " + c.getFloat(2) + " | " + c.getString(3) + " | " + c.getFloat(4) + " | " + c.getFloat(5);
                     arreglo[i] = linea;
                     i++;
                 } while (c.moveToNext());
