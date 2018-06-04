@@ -4,10 +4,12 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.content.Intent;
-import android.content.Intent;
+import android.content.Context;
 import android.content.pm.PackageManager;
 import android.database.sqlite.SQLiteDatabase;
 import android.location.Location;
+import android.net.wifi.WifiInfo;
+import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
@@ -23,8 +25,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Button;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -64,6 +64,12 @@ public class MainActivity extends AppCompatActivity
     //Posición GPS del dispositivo
     private LatLng gpsLocation;
 
+    //Clase WifiInfo con los metodos para obtener datos de la coneccion
+    private WifiManager wifiManager;
+    private WifiInfo connectionInfo;
+    //Datos wifi solicitados
+    private int speed;
+    private int dBms;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -141,6 +147,10 @@ public class MainActivity extends AppCompatActivity
                         GPS_SETTINGS);
             }
         }
+        //WIFI
+        wifiManager = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
+        connectionInfo = wifiManager.getConnectionInfo();
+    }
 
     }
 
@@ -242,15 +252,24 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onMarkerDragEnd(Marker marker) {
         gpsLocation = marker.getPosition();
-        Toast.makeText(this, "Posición final: " + gpsLocation.toString(), Toast.LENGTH_SHORT).show();
+
+        //Actualiza los valores del wifi
+        dBms = connectionInfo.getFrequency();
+        speed = connectionInfo.getLinkSpeed();
+
+        Toast.makeText(this, "Posición final: " + gpsLocation.toString() + dBms + " Mhz "+ speed + " Mbps", Toast.LENGTH_SHORT).show();
     }
 
     public void updateGpsLocation(Location location)
     {
         //Asigna la LatLng a partir la ubicación GPS
         gpsLocation = new LatLng(location.getLatitude(), location.getLongitude());
-        Toast.makeText(this, "Posición actual: " + gpsLocation.toString(), Toast.LENGTH_SHORT).show();
 
+        //Actualiza los valores del wifi
+        dBms = connectionInfo.getFrequency();
+        speed = connectionInfo.getLinkSpeed();
+
+        Toast.makeText(this, "Posición actual: " + gpsLocation.toString() + dBms + " Mhz "+ speed + " Mbps", Toast.LENGTH_SHORT).show();
     }
 
     public void addMarkerToLocation(Location location, String tittle)
@@ -262,6 +281,8 @@ public class MainActivity extends AppCompatActivity
                 .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ROSE))
                 .draggable(true)
         );
+        dBms = connectionInfo.getFrequency();
+        speed = connectionInfo.getLinkSpeed();
     }
 
     public void moveCameraToLocation(Location location)
