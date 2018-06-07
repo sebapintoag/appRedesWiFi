@@ -22,7 +22,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.TextView;
 import android.widget.Toast;
 import com.facebook.network.connectionclass.ConnectionClassManager;
 import com.facebook.network.connectionclass.ConnectionQuality;
@@ -45,6 +44,7 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import android.location.LocationManager;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, OnMapReadyCallback, GoogleMap.OnMyLocationButtonClickListener,
@@ -56,6 +56,9 @@ public class MainActivity extends AppCompatActivity
 
     //Obtiene la posición actual
     private FusedLocationProviderClient mFusedLocationClient;
+
+    //Verificar servicos GPS
+    private LocationManager locationManager;
 
     //Posición GPS del dispositivo
     private LatLng gpsLocation;
@@ -289,11 +292,29 @@ public class MainActivity extends AppCompatActivity
         } else { //Si está predindo
             connectionInfo = wifiManager.getConnectionInfo();
             if (connectionInfo.getNetworkId() == -1) { //Si está prendido pero no conectado
-                Toast.makeText(MainActivity.this, "No hay conexión Wi-Fi\nPor favor, conéctese a una red WiFi", Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity.this, "No hay conexión Wi-Fi\nPor favor, conéctese a una red WiFi para continuar", Toast.LENGTH_SHORT).show();
                 return;
             }
         }
-        Log.e("> Wifi", "Conectado a Wi-Fi");
+        Log.i("> Wifi", "Conectado a Wi-Fi");
+
+        //Verifica si el GPS esta activado
+        locationManager = (LocationManager) getApplicationContext().getSystemService(Context.LOCATION_SERVICE);
+        if(!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) //Si está apagado
+        {
+            Toast.makeText(MainActivity.this, "Ubicación GPS apagada\nPor favor, encienda la ubicación GPS para continuar", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        Log.i("> GPS", "Ubicacion GPS activada");
+
+
+        //Si la ubicacion gps es nula, no hace nada
+        if(gpsLocation == null)
+        {
+            Toast.makeText(MainActivity.this, "Por favor, indique su posición en el mapa", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        Log.i("> GPS", "Ubicacion GPS no es nula");
 
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
         fechaHora = sdf.format(new Date());
