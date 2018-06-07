@@ -25,20 +25,6 @@ public class SplashActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        /*
-        //Se revisa la conexión a Internet y se avisa la inutilidad de la App si esto
-        //Error de Conexión
-        ConnectivityManager conMan = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo.State mobile = conMan.getNetworkInfo(0).getState();
-        NetworkInfo.State wifi = conMan.getNetworkInfo(1).getState();
-
-        if(!(mobile.toString() == "CONNECTED" ||  wifi.toString()=="CONNECTED")){
-            Toast.makeText(getApplicationContext(), "Para usar esta aplicación se necesita conexión a Internet. Conéctese a Internet y luego intente nuevamente",
-                    Toast.LENGTH_LONG).show();
-        }
-        //Si las dos redes no estan conectadas, se avisa
-        //falta el popup
-        */
 
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
                 == PackageManager.PERMISSION_GRANTED) {
@@ -65,7 +51,7 @@ public class SplashActivity extends AppCompatActivity {
                     // permission was granted, yay! Do the
                     // location-related task you need to do.
 
-                    Log.e("> PERMISSION", "OK");
+                    Log.i("> PERMISSION", "OK");
                     Intent intent = new Intent(this, MainActivity.class);
                     startActivity(intent);
                     finish();
@@ -75,7 +61,7 @@ public class SplashActivity extends AppCompatActivity {
                     // permission denied, boo! Disable the
                     // functionality that depends on this permission.
 
-                    Log.e("> PERMISSION", "NO");
+                    Log.i("> PERMISSION", "NO");
 
                     AlertDialog.Builder dialog = new AlertDialog.Builder(this);
                     dialog.setCancelable(false);

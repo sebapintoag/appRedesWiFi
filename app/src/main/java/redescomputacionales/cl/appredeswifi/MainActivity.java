@@ -166,13 +166,6 @@ public class MainActivity extends AppCompatActivity
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        /*
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-        */
-
         return super.onOptionsItemSelected(item);
     }
 
@@ -297,6 +290,18 @@ public class MainActivity extends AppCompatActivity
             }
         }
         Log.i("> Wifi", "Conectado a Wi-Fi");
+
+        //Verifica si la red a la que esta conectada es de la usach
+        //DESCOMENTAR CUANDO SE ENTREGUE EL AVANCE
+        /*
+        String wifiName = wifiManager.getConnectionInfo().getSSID();
+        Log.i("> WIFI NAME", wifiName);
+        if(!wifiName.equals("\"USACH-Alumnos\""))
+        {
+            Toast.makeText(MainActivity.this, "La red Wi-Fi no es USACH-Alumnos\nPor favor, conéctese a esta red", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        */
 
         //Verifica si el GPS esta activado
         locationManager = (LocationManager) getApplicationContext().getSystemService(Context.LOCATION_SERVICE);
