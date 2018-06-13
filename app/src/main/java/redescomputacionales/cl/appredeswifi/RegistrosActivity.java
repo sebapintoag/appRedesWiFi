@@ -5,10 +5,14 @@ import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 
 public class RegistrosActivity extends AppCompatActivity {
+
+    Button bEnviar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -19,6 +23,22 @@ public class RegistrosActivity extends AppCompatActivity {
         getSupportActionBar().setTitle("Registros previos");
         //Añade el botón "hacia atrás" por defecto de Android
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        bEnviar = (Button)findViewById(R.id.enviar);
+        bEnviar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                ConexionSQLiteHelper bdConn = new ConexionSQLiteHelper(RegistrosActivity.this);
+                SQLiteDatabase db = bdConn.getWritableDatabase();
+                db.delete("registros",null, null);
+                db.close();
+
+                cargar();
+
+            }
+        });
+
 
         cargar();
     }
