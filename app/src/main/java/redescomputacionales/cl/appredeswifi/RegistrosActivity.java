@@ -70,7 +70,7 @@ public class RegistrosActivity extends AppCompatActivity {
             String[] arreglo = new String[cantidad];
             if (c.moveToFirst()) {
                 do {
-                    String linea = c.getInt(0) + " | " + c.getFloat(1) + " | " + c.getFloat(2) + " | " + c.getString(3) + " | " + c.getFloat(4) + " | " + c.getFloat(5);
+                    String linea = c.getInt(0) + " | " + c.getFloat(1) + " | " + c.getFloat(2) + " | " + c.getString(3) + " | " + c.getFloat(4) + " | " + c.getFloat(5) + " | " + c.getString(6);
                     arreglo[i] = linea;
                     i++;
                 } while (c.moveToNext());

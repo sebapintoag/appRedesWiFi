@@ -73,6 +73,9 @@ public class MainActivity extends AppCompatActivity
     private double speed;
     private double intensidad;
 
+    //Estado de la red
+    String estado;
+
     String info;
 
     private static final String TAG = "ConnectionClass-Sample";
@@ -335,18 +338,12 @@ public class MainActivity extends AppCompatActivity
             registronuevo.put("fecha", fechaHora);
             registronuevo.put("velocidad", speed);
             registronuevo.put("intensidad", intensidad);
+            registronuevo.put("estado", estado);
 
             db.insert("registros", null, registronuevo);
         }
 
-        info = "Datos almacenados\n> Latitud: " + gpsLocation.latitude + "\n> Longitud: " + gpsLocation.longitude + "\n> Fecha: " + fechaHora + "\n> Intensidad Wi-Fi: " + String.valueOf(intensidad) + " dBm" + "\n> Velocidad Wi-Fi: " + String.valueOf(speed) + " Kbps";
-        /*
-        Snackbar snackbar = Snackbar.make(view, info, Snackbar.LENGTH_LONG).setDuration(Snackbar.LENGTH_LONG);
-        View snackbarView = snackbar.getView();
-        TextView tv = (TextView) snackbarView.findViewById(android.support.design.R.id.snackbar_text);
-        tv.setMaxLines(6);
-        snackbar.show();
-        */
+        info = "Datos almacenados\n> Latitud: " + gpsLocation.latitude + "\n> Longitud: " + gpsLocation.longitude + "\n> Fecha: " + fechaHora + "\n> Intensidad Wi-Fi: " + String.valueOf(intensidad) + " dBm" + "\n> Velocidad Wi-Fi: " + String.valueOf(speed) + " Kbps" + "\n> Estado: " + estado;
         Toast.makeText(this, info, Toast.LENGTH_SHORT).show();
     }
 
@@ -362,6 +359,7 @@ public class MainActivity extends AppCompatActivity
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
+                    estado = mConnectionClass.toString();
                 }
             });
         }
@@ -413,8 +411,8 @@ public class MainActivity extends AppCompatActivity
                 mRunningBar.setVisibility(View.GONE);
                 speed = mConnectionClassManager.getDownloadKBitsPerSecond();
                 saveData();
-                mConnectionClass = ConnectionQuality.UNKNOWN;
-                mTries = 0;
+                //mConnectionClass = ConnectionQuality.UNKNOWN;
+                //mTries = 0;
             }
 
         }

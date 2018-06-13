@@ -19,7 +19,7 @@ public class ConexionSQLiteHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {   // se crea los script
 
-        db.execSQL("CREATE TABLE registros(id_registro INTEGER PRIMARY KEY AUTOINCREMENT, latitud INTEGER, longitud INTEGER, fecha TEXT, velocidad INTEGER, intensidad INTEGER)");
+        db.execSQL("CREATE TABLE registros(id_registro INTEGER PRIMARY KEY AUTOINCREMENT, latitud INTEGER, longitud INTEGER, fecha TEXT, velocidad INTEGER, intensidad INTEGER, estado TEXT)");
     }
 
     @Override
