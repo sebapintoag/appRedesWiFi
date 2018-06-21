@@ -12,20 +12,15 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.util.HashMap;
-import java.util.Map;
 
 public class RegistrosActivity extends AppCompatActivity {
 
@@ -35,6 +30,10 @@ public class RegistrosActivity extends AppCompatActivity {
     private static RegistrosActivity mInstance;
     private  RequestQueue requestQueue;
     int i;
+    int cantidad;
+
+    private View mRunningBar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,16 +45,14 @@ public class RegistrosActivity extends AppCompatActivity {
         //Añade el botón "hacia atrás" por defecto de Android
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        mRunningBar = findViewById(R.id.runningBarReg);
+        mRunningBar.setVisibility(View.GONE);
+
         bEnviar = (Button)findViewById(R.id.enviar);
         bEnviar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ConexionSQLiteHelper bdConn = new ConexionSQLiteHelper(RegistrosActivity.this);
-                SQLiteDatabase db = bdConn.getWritableDatabase();
-                db.delete("registros",null, null);
-                db.close();
-
-                cargar();
+                enviarDatos();
             }
         });
         cargar();
@@ -96,16 +93,111 @@ public class RegistrosActivity extends AppCompatActivity {
         }
     }
 
-    private void cargar (){
+    public void enviarDatos()
+    {
 
-        ConexionSQLiteHelper bdConn = new ConexionSQLiteHelper(RegistrosActivity.this);
-        SQLiteDatabase db = bdConn.getWritableDatabase();
+
         final Context context = getApplicationContext();
         final CharSequence postCorrect = "Datos ingresados correctamente";
         final CharSequence postError= "Ha ocurrido un error con la subida de datos";
         final int shortDuration = Toast.LENGTH_SHORT;
         final int longDuration = Toast.LENGTH_LONG;
-        int cantidad;
+
+        // Instantiate the RequestQueue.
+        final RequestQueue[] queue = {Volley.newRequestQueue(RegistrosActivity.this)};
+        //this is the url where you want to send the request
+        String url = "http://206.189.184.79:8091/redes/signals";
+
+
+        // Request a string response from the provided URL.
+        for(i=0;i<cantidad-1;i++)
+        {
+            String _id = arregloREST[i][0];
+            String _latitud = arregloREST[i][1];
+            String _longitud = arregloREST[i][2];
+            String _fecha = arregloREST[i][3];
+            String estado = arregloREST[i][4];
+            String _velocidad = arregloREST[i][5];
+            String _intensidad = arregloREST[i][6];
+            JSONObject postparams=new JSONObject();
+            try {
+                postparams.put("id", _id);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            try {
+                postparams.put("latitud", _latitud);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            try {
+                postparams.put("longitud", _longitud);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            try {
+                postparams.put("fecha", _fecha);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            try {
+                postparams.put("estado", estado);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            try {
+                postparams.put("velocidad", _velocidad);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            try {
+                postparams.put("intensidad", _intensidad);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            bEnviar.setVisibility(View.GONE);
+            mRunningBar.setVisibility(View.VISIBLE);
+
+            JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
+                    (Request.Method.POST, url, postparams, new Response.Listener<JSONObject>() {
+
+                        @Override
+                        public void onResponse(JSONObject response) {
+                            mRunningBar.setVisibility(View.GONE);
+                            bEnviar.setVisibility(View.VISIBLE);
+                            Toast toastPlain = Toast.makeText(context, postCorrect, shortDuration);
+                            toastPlain.show();
+                            //Toast toast = Toast.makeText(context, response.toString() , longDuration);
+                            //toast.show();
+
+                            ConexionSQLiteHelper bdConn = new ConexionSQLiteHelper(RegistrosActivity.this);
+                            SQLiteDatabase db = bdConn.getWritableDatabase();
+                            db.delete("registros",null, null);
+                            db.close();
+                            cargar();
+                        }
+                    }, new Response.ErrorListener() {
+
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            mRunningBar.setVisibility(View.GONE);
+                            bEnviar.setVisibility(View.VISIBLE);
+                            Toast toastPlain = Toast.makeText(context, postError, shortDuration);
+                            toastPlain.show();
+                            //Toast toast = Toast.makeText(context, error.toString(), longDuration);
+                            //toast.show();
+                        }
+                    });
+            // Access the RequestQueue through your singleton class.
+            RegistrosActivity.getInstance().addToRequestQueue(jsonObjectRequest,"postRequest");
+        }
+    }
+
+    public void cargar (){
+
+        ConexionSQLiteHelper bdConn = new ConexionSQLiteHelper(RegistrosActivity.this);
+        SQLiteDatabase db = bdConn.getWritableDatabase();
         if (db != null) {
             Cursor c = db.rawQuery("select * from registros", null);
             cantidad = c.getCount();
@@ -131,81 +223,6 @@ public class RegistrosActivity extends AppCompatActivity {
             ListView lista = (ListView) findViewById(R.id.listaRegistros);
             lista.setAdapter(adapter);
 
-            // Instantiate the RequestQueue.
-            RequestQueue queue = Volley.newRequestQueue(RegistrosActivity.this);
-            //this is the url where you want to send the request
-            String url = "http://206.189.184.79:8091/redes/signals";
-
-            // Request a string response from the provided URL.
-            for(i=0;i<cantidad-1;i++)
-            {
-                String _id = arregloREST[i][0];
-                String _latitud = arregloREST[i][1];
-                String _longitud = arregloREST[i][2];
-                String _fecha = arregloREST[i][3];
-                String estado = arregloREST[i][4];
-                String _velocidad = arregloREST[i][5];
-                String _intensidad = arregloREST[i][6];
-                JSONObject postparams=new JSONObject();
-                try {
-                    postparams.put("id", _id);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-                try {
-                    postparams.put("latitud", _latitud);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-                try {
-                    postparams.put("longitud", _longitud);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-                try {
-                    postparams.put("fecha", _fecha);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-                try {
-                    postparams.put("estado", estado);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-                try {
-                    postparams.put("velocidad", _velocidad);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-                try {
-                    postparams.put("intensidad", _intensidad);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-
-                JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
-                        (Request.Method.POST, url, postparams, new Response.Listener<JSONObject>() {
-
-                            @Override
-                            public void onResponse(JSONObject response) {
-                                //Toast toastPlain = Toast.makeText(context, "Request completed", shortDuration);
-                                //toastPlain.show();
-                                Toast toast = Toast.makeText(context, response.toString() , longDuration);
-                                toast.show();
-                            }
-                        }, new Response.ErrorListener() {
-
-                            @Override
-                            public void onErrorResponse(VolleyError error) {
-                                Toast toastPlain = Toast.makeText(context, postError, shortDuration);
-                                toastPlain.show();
-                                Toast toast = Toast.makeText(context, error.toString(), longDuration);
-                                toast.show();
-                            }
-                        });
-                // Access the RequestQueue through your singleton class.
-                RegistrosActivity.getInstance().addToRequestQueue(jsonObjectRequest,"postRequest");
-            }
         }
     }
 }

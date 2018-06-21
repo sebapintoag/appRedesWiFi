@@ -13,9 +13,9 @@
     <item android:title="Otros">
         <menu>
             <item
-                android:id="@+id/nada"
-                android:icon="@drawable/ic_menu_share"
-                android:title="Nada" />
+                android:id="@+id/acercaDe"
+                android:icon="@drawable/help"
+                android:title="Acerca de esta app" />
         </menu>
     </item>
 

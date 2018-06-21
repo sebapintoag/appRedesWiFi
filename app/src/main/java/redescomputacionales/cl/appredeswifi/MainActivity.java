@@ -90,6 +90,8 @@ public class MainActivity extends AppCompatActivity
     private int mTries = 0;
     private ConnectionQuality mConnectionClass = ConnectionQuality.UNKNOWN;
 
+    private FloatingActionButton fab;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -98,7 +100,7 @@ public class MainActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -185,8 +187,8 @@ public class MainActivity extends AppCompatActivity
             } else {
                 Toast.makeText(this, "Ha ocurrido un error", Toast.LENGTH_SHORT).show();
             }
-        } else if (id == R.id.nada) {
-            Toast.makeText(this, "Esto es opcional", Toast.LENGTH_SHORT).show();
+        } else if (id == R.id.acercaDe) {
+            Toast.makeText(this, "Universidad de Santiago de Chile\nDepartamento de Ingeniería Informática\nRedes Computacionales 1-2018", Toast.LENGTH_SHORT).show();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -295,8 +297,6 @@ public class MainActivity extends AppCompatActivity
         Log.i("> Wifi", "Conectado a Wi-Fi");
 
         //Verifica si la red a la que esta conectada es de la usach
-        //DESCOMENTAR CUANDO SE ENTREGUE EL AVANCE
-        /*
         String wifiName = wifiManager.getConnectionInfo().getSSID();
         Log.i("> WIFI NAME", wifiName);
         if(!wifiName.equals("\"USACH-Alumnos\""))
@@ -304,7 +304,6 @@ public class MainActivity extends AppCompatActivity
             Toast.makeText(MainActivity.this, "La red Wi-Fi no es USACH-Alumnos\nPor favor, conéctese a esta red", Toast.LENGTH_SHORT).show();
             return;
         }
-        */
 
         //Verifica si el GPS esta activado
         locationManager = (LocationManager) getApplicationContext().getSystemService(Context.LOCATION_SERVICE);
@@ -372,6 +371,7 @@ public class MainActivity extends AppCompatActivity
 
         @Override
         protected void onPreExecute() {
+            fab.hide();
             mDeviceBandwidthSampler.startSampling();
             mRunningBar.setVisibility(View.VISIBLE);
         }
@@ -401,6 +401,7 @@ public class MainActivity extends AppCompatActivity
 
         @Override
         protected void onPostExecute(Void v) {
+            fab.show();
             mDeviceBandwidthSampler.stopSampling();
             // Retry for up to 10 times until we find a ConnectionClass.
             if (mConnectionClass == ConnectionQuality.UNKNOWN && mTries < 10) {
