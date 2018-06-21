@@ -7,7 +7,6 @@
     tools:context=".RegistrosActivity">
 
 
-
     <TextView
         android:id="@+id/textView2"
         android:layout_width="wrap_content"
@@ -40,9 +39,9 @@
         android:id="@+id/enviar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
         android:text="Enviar"
         android:textAppearance="@android:style/TextAppearance"
-        android:layout_gravity="bottom|end"
         tools:layout_editor_absoluteX="16dp"
         tools:layout_editor_absoluteY="555dp" />
 
