@@ -8,6 +8,11 @@
             android:id="@+id/registros"
             android:icon="@drawable/view_list"
             android:title="Registros previos" />
+
+        <item
+            android:id="@+id/logout"
+            android:icon="@drawable/logout"
+            android:title="Cerrar sesión" />
     </group>
 
     <item android:title="Otros">

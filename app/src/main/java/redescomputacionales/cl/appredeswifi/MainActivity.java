@@ -2,6 +2,7 @@ package redescomputacionales.cl.appredeswifi;
 
 import android.annotation.SuppressLint;
 import android.content.ContentValues;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
@@ -12,6 +13,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -22,10 +24,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 import com.facebook.network.connectionclass.ConnectionClassManager;
 import com.facebook.network.connectionclass.ConnectionQuality;
 import com.facebook.network.connectionclass.DeviceBandwidthSampler;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdate;
@@ -38,6 +44,8 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.squareup.picasso.Picasso;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
@@ -136,6 +144,12 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
+    protected void onStart() {
+        super.onStart();
+        setUserData();
+    }
+
+    @Override
     protected void onPause() {
         super.onPause();
         mConnectionClassManager.remove(mListener);
@@ -145,6 +159,30 @@ public class MainActivity extends AppCompatActivity
     protected void onResume() {
         super.onResume();
         mConnectionClassManager.register(mListener);
+    }
+
+    public void setUserData()
+    {
+        GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
+
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        View headerView = navigationView.getHeaderView(0);
+        TextView mainHeader = (TextView) headerView.findViewById(R.id.mainHeaderId);
+        TextView subHeader = (TextView) headerView.findViewById(R.id.subHeaderId);
+        ImageView imageView = (ImageView) headerView.findViewById(R.id.imageView);
+
+        if(account != null)
+        {
+            mainHeader.setText(account.getDisplayName());
+            subHeader.setText(account.getEmail());
+            Picasso.get().load(account.getPhotoUrl()).into(imageView);
+        }
+        else
+        {
+            mainHeader.setText("AppRedesWiFi");
+            subHeader.setText("Redes Computacionales 1-2018");
+            imageView.setImageResource(R.mipmap.ic_launcher);
+        }
     }
 
     @Override
@@ -187,7 +225,34 @@ public class MainActivity extends AppCompatActivity
             } else {
                 Toast.makeText(this, "Ha ocurrido un error", Toast.LENGTH_SHORT).show();
             }
-        } else if (id == R.id.acercaDe) {
+        }
+
+        else if(id == R.id.logout)
+        {
+            AlertDialog.Builder dialog = new AlertDialog.Builder(this, R.style.Theme_AppCompat_Light_Dialog);
+            dialog.setCancelable(false);
+            dialog.setTitle("Salir de AppRedesWiFi");
+            dialog.setMessage("¿Está seguro que desea cerrar sesión?");
+            dialog.setPositiveButton("Sí", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int id) {
+                    //Action for positive.
+                    Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+                    intent.putExtra("ACTION", "signout");
+                    startActivity(intent);
+                    finish();
+                }
+            }).setNegativeButton("No ", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    //Action for negative.
+                }
+            });
+            final AlertDialog alert = dialog.create();
+            alert.show();
+        }
+
+        else if (id == R.id.acercaDe) {
             Toast.makeText(this, "Universidad de Santiago de Chile\nDepartamento de Ingeniería Informática\nRedes Computacionales 1-2018", Toast.LENGTH_SHORT).show();
         }
 

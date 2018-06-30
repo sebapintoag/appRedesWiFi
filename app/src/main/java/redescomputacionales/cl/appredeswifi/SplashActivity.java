@@ -28,7 +28,8 @@ public class SplashActivity extends AppCompatActivity {
 
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
                 == PackageManager.PERMISSION_GRANTED) {
-            Intent intent = new Intent(this, MainActivity.class);
+            Intent intent = new Intent(this, LoginActivity.class);
+            intent.putExtra("ACTION", "signin");
             startActivity(intent);
             finish();
         }
@@ -37,7 +38,6 @@ public class SplashActivity extends AppCompatActivity {
                     new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
                     REQUEST_LOCATION);
         }
-
     }
 
     @Override
@@ -48,22 +48,15 @@ public class SplashActivity extends AppCompatActivity {
                 // If request is cancelled, the result arrays are empty.
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-
                     // permission was granted, yay! Do the
                     // location-related task you need to do.
-
-                    Log.i("> PERMISSION", "OK");
-                    Intent intent = new Intent(this, MainActivity.class);
+                    Intent intent = new Intent(this, LoginActivity.class);
                     startActivity(intent);
                     finish();
 
                 } else {
-
                     // permission denied, boo! Disable the
                     // functionality that depends on this permission.
-
-                    Log.i("> PERMISSION", "NO");
-
                     AlertDialog.Builder dialog = new AlertDialog.Builder(this);
                     dialog.setCancelable(false);
                     dialog.setTitle("Información");
@@ -85,13 +78,11 @@ public class SplashActivity extends AppCompatActivity {
                                     //System.exit(0);
                                 }
                             });
-
                     final AlertDialog alert = dialog.create();
                     alert.show();
                 }
                 return;
             }
-
             // other 'case' lines to check for other
             // permissions this app might request
         }
