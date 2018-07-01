@@ -18,7 +18,9 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.501"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/loginInfoId" />
+        app:layout_constraintTop_toBottomOf="@+id/loginInfoId" >
+
+    </com.google.android.gms.common.SignInButton>
 
     <TextView
         android:id="@+id/loginInfoId"
@@ -37,8 +39,8 @@
 
     <ImageView
         android:id="@+id/imageView2"
-        android:layout_width="@android:dimen/thumbnail_height"
-        android:layout_height="@android:dimen/thumbnail_height"
+        android:layout_width="@android:dimen/notification_large_icon_height"
+        android:layout_height="@android:dimen/notification_large_icon_height"
         android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
@@ -48,5 +50,22 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/login" />
+
+    <ProgressBar
+        android:id="@+id/runningBarLogin"
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_gravity="center"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </android.support.constraint.ConstraintLayout>
