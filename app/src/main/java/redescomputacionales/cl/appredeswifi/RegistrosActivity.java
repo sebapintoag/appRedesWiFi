@@ -110,7 +110,7 @@ public class RegistrosActivity extends AppCompatActivity {
 
 
         // Request a string response from the provided URL.
-        for(i=0;i<cantidad-1;i++)
+        for(i=0;i<cantidad;i++)
         {
             String _id = arregloREST[i][0];
             String _latitud = arregloREST[i][1];

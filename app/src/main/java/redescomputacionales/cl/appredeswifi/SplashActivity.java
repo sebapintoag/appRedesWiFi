@@ -51,6 +51,7 @@ public class SplashActivity extends AppCompatActivity {
                     // permission was granted, yay! Do the
                     // location-related task you need to do.
                     Intent intent = new Intent(this, LoginActivity.class);
+                    intent.putExtra("ACTION", "signin");
                     startActivity(intent);
                     finish();
 

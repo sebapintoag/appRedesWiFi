@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -25,6 +26,8 @@ public class LoginActivity extends AppCompatActivity {
     private GoogleSignInClient mGoogleSignInClient;
 
     private int RC_SIGN_IN = 777;
+
+    private View mRunningBarLogin;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +57,9 @@ public class LoginActivity extends AppCompatActivity {
                 signIn();
             }
         });
+
+        mRunningBarLogin = findViewById(R.id.runningBarLogin);
+        mRunningBarLogin.setVisibility(View.GONE);
     }
 
     @Override
@@ -96,16 +102,20 @@ public class LoginActivity extends AppCompatActivity {
             //Pasar al MainActivity
             Intent intent = new Intent(this, MainActivity.class);
             startActivity(intent);
+            mRunningBarLogin.setVisibility(View.GONE);
             finish();
 
         } catch (ApiException e) {
             // The ApiException status code indicates the detailed failure reason.
             // Please refer to the GoogleSignInStatusCodes class reference for more information.
+            mRunningBarLogin.setVisibility(View.GONE);
             Log.w("Error", "signInResult:failed code=" + e.getStatusCode());
+            Toast.makeText(this, "Ha ocurrido un error\nCodigo: " + e.getStatusCode(), Toast.LENGTH_SHORT).show();
         }
     }
 
     private void signIn() {
+        mRunningBarLogin.setVisibility(View.VISIBLE);
         Intent signInIntent = mGoogleSignInClient.getSignInIntent();
         startActivityForResult(signInIntent, RC_SIGN_IN);
     }
