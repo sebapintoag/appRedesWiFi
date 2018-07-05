@@ -370,6 +370,7 @@ public class MainActivity extends AppCompatActivity
             return;
         }
 
+
         //Verifica si el GPS esta activado
         locationManager = (LocationManager) getApplicationContext().getSystemService(Context.LOCATION_SERVICE);
         if(!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) //Si está apagado
