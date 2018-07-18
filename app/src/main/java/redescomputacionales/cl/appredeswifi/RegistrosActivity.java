@@ -116,9 +116,9 @@ public class RegistrosActivity extends AppCompatActivity {
             String _latitud = arregloREST[i][1];
             String _longitud = arregloREST[i][2];
             String _fecha = arregloREST[i][3];
-            String estado = arregloREST[i][4];
-            String _velocidad = arregloREST[i][5];
-            String _intensidad = arregloREST[i][6];
+            String _velocidad = arregloREST[i][4];
+            String _intensidad = arregloREST[i][5];
+            String estado = arregloREST[i][6];
             JSONObject postparams=new JSONObject();
             try {
                 postparams.put("id", _id);
@@ -141,17 +141,17 @@ public class RegistrosActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
             try {
-                postparams.put("estado", estado);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-            try {
                 postparams.put("velocidad", _velocidad);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
             try {
                 postparams.put("intensidad", _intensidad);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            try {
+                postparams.put("estado", estado);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -168,8 +168,6 @@ public class RegistrosActivity extends AppCompatActivity {
                             bEnviar.setVisibility(View.VISIBLE);
                             Toast toastPlain = Toast.makeText(context, postCorrect, shortDuration);
                             toastPlain.show();
-                            //Toast toast = Toast.makeText(context, response.toString() , longDuration);
-                            //toast.show();
 
                             ConexionSQLiteHelper bdConn = new ConexionSQLiteHelper(RegistrosActivity.this);
                             SQLiteDatabase db = bdConn.getWritableDatabase();
@@ -185,8 +183,6 @@ public class RegistrosActivity extends AppCompatActivity {
                             bEnviar.setVisibility(View.VISIBLE);
                             Toast toastPlain = Toast.makeText(context, postError, shortDuration);
                             toastPlain.show();
-                            //Toast toast = Toast.makeText(context, error.toString(), longDuration);
-                            //toast.show();
                         }
                     });
             // Access the RequestQueue through your singleton class.
