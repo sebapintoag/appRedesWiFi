@@ -112,7 +112,6 @@ public class RegistrosActivity extends AppCompatActivity {
         // Request a string response from the provided URL.
         for(i=0;i<cantidad;i++)
         {
-            String _id = arregloREST[i][0];
             String _latitud = arregloREST[i][1];
             String _longitud = arregloREST[i][2];
             String _fecha = arregloREST[i][3];
@@ -120,11 +119,6 @@ public class RegistrosActivity extends AppCompatActivity {
             String _intensidad = arregloREST[i][5];
             String estado = arregloREST[i][6];
             JSONObject postparams=new JSONObject();
-            try {
-                postparams.put("id", _id);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
             try {
                 postparams.put("latitud", _latitud);
             } catch (JSONException e) {

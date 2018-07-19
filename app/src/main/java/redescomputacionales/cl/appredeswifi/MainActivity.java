@@ -113,7 +113,6 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onClick(View view) {
                 new DownloadImage().execute(mURL);
-                //saveData(view);
             }
         });
 
@@ -394,6 +393,14 @@ public class MainActivity extends AppCompatActivity
 
         intensidad = (double) connectionInfo.getRssi();
 
+
+        if(estado == null || estado.equals("null"))
+        {
+            info = "Error al medir el estado de la red\nIntente nuevamente";
+            Toast.makeText(this, info, Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         ConexionSQLiteHelper bdConn = new ConexionSQLiteHelper(MainActivity.this);
         SQLiteDatabase db = bdConn.getWritableDatabase();
         if (db != null) {
@@ -478,8 +485,6 @@ public class MainActivity extends AppCompatActivity
                 mRunningBar.setVisibility(View.GONE);
                 speed = mConnectionClassManager.getDownloadKBitsPerSecond();
                 saveData();
-                //mConnectionClass = ConnectionQuality.UNKNOWN;
-                //mTries = 0;
             }
 
         }
