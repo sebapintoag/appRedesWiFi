@@ -209,10 +209,9 @@ public class RegistrosActivity extends AppCompatActivity {
                     i++;
                 } while (c.moveToNext());
             }
-            ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, arreglo);
             ListView lista = (ListView) findViewById(R.id.listaRegistros);
-            lista.setAdapter(adapter);
-
+            final ListAdapter listAdapter = new ListAdapter(getApplicationContext(), arregloREST);
+            lista.setAdapter(listAdapter);
         }
     }
 }

@@ -189,8 +189,26 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
-        } else {
-            super.onBackPressed();
+        }
+        else {
+            AlertDialog.Builder dialog = new AlertDialog.Builder(this, R.style.Theme_AppCompat_Light_Dialog);
+            dialog.setCancelable(false);
+            dialog.setTitle("Salir de AppRedesWiFi");
+            dialog.setMessage("¿Está seguro que desea salir de la aplicación?");
+            dialog.setPositiveButton("Sí", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int id) {
+                    //Action for positive.
+                    finish();
+                }
+            }).setNegativeButton("No ", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    //Action for negative.
+                }
+            });
+            final AlertDialog alert = dialog.create();
+            alert.show();
         }
     }
 
@@ -230,7 +248,7 @@ public class MainActivity extends AppCompatActivity
         {
             AlertDialog.Builder dialog = new AlertDialog.Builder(this, R.style.Theme_AppCompat_Light_Dialog);
             dialog.setCancelable(false);
-            dialog.setTitle("Salir de AppRedesWiFi");
+            dialog.setTitle("Cerrar sesión en AppRedesWiFi");
             dialog.setMessage("¿Está seguro que desea cerrar sesión?");
             dialog.setPositiveButton("Sí", new DialogInterface.OnClickListener() {
                 @Override
@@ -359,7 +377,6 @@ public class MainActivity extends AppCompatActivity
             }
         }
         Log.i("> Wifi", "Conectado a Wi-Fi");
-
         //Verifica si la red a la que esta conectada es de la usach
         String wifiName = wifiManager.getConnectionInfo().getSSID();
         Log.i("> WIFI NAME", wifiName);
@@ -368,7 +385,6 @@ public class MainActivity extends AppCompatActivity
             Toast.makeText(MainActivity.this, "La red Wi-Fi no es USACH-Alumnos\nPor favor, conéctese a esta red", Toast.LENGTH_SHORT).show();
             return;
         }
-
 
         //Verifica si el GPS esta activado
         locationManager = (LocationManager) getApplicationContext().getSystemService(Context.LOCATION_SERVICE);
@@ -489,6 +505,7 @@ public class MainActivity extends AppCompatActivity
 
         }
     }
+
 }
 
 

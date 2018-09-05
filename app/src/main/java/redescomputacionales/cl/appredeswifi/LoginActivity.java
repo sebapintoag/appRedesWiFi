@@ -1,8 +1,10 @@
 package redescomputacionales.cl.appredeswifi;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.support.annotation.NonNull;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Html;
@@ -35,6 +37,8 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
 
         TextView loginInfo = (TextView) findViewById(R.id.loginInfoId);
+
+        getSupportActionBar().setTitle("Iniciar sesión");
 
         String loginInfoHtml = "<h2>AppRedesWiFi</h2><br><h3>Accede con tu cuenta usach para poder usar la aplicación</h3>";
         loginInfo.setText(Html.fromHtml(loginInfoHtml));
@@ -138,6 +142,28 @@ public class LoginActivity extends AppCompatActivity {
                         // ...
                     }
                 });
+    }
+
+    @Override
+    public void onBackPressed() {
+        AlertDialog.Builder dialog = new AlertDialog.Builder(this, R.style.Theme_AppCompat_Light_Dialog);
+        dialog.setCancelable(false);
+        dialog.setTitle("Salir de AppRedesWiFi");
+        dialog.setMessage("¿Está seguro que desea salir de la aplicación?");
+        dialog.setPositiveButton("Sí", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int id) {
+                //Action for positive.
+                finish();
+            }
+        }).setNegativeButton("No ", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                //Action for negative.
+            }
+        });
+        final AlertDialog alert = dialog.create();
+        alert.show();
     }
 
 }
